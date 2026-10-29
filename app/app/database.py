@@ -1,0 +1,27 @@
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
+
+# Replace this URL with the database URL already used by your project.
+# This example is for SQLite only.
+DATABASE_URL = "sqlite:///./worksphere.db"
+
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False},
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine,
+)
+
+Base = declarative_base()
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
